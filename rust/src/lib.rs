@@ -1,5 +1,5 @@
 use std::ffi::c_void;
-use std::mem::{transmute, ManuallyDrop};
+use std::mem::{transmute};
 use std::ptr::NonNull;
 use godot::prelude::*;
 use godot::classes::{DisplayServer, IDisplayServer, ISprite2D, Sprite2D};
@@ -49,7 +49,8 @@ impl ISprite2D for Player {
 #[derive(GodotClass)]
 #[class(base=Node)]
 struct WebView {
-    base: Base<Node>
+    base: Base<Node>,
+    webview: Option<wry::WebView>,
 }
 
 #[godot_api]
@@ -57,14 +58,15 @@ impl INode for WebView {
     fn init(base: Base<Node>) -> Self {
         godot_print!("Hello, webview renderer!");
         Self {
-            base
+            base,
+            webview: None,
         }
     }
 
     fn ready(&mut self) {
         godot_print!("webview is ready");
         let window = GodotWindow;
-        let webview = ManuallyDrop::new(WebViewBuilder::new()
+        let webview = WebViewBuilder::new()
             .with_url("https://github.com/doceazedo")
             .with_bounds(Rect {
                 position: LogicalPosition::new(300, 100).into(),
@@ -74,9 +76,8 @@ impl INode for WebView {
             .with_background_color(RGBA::from((0, 255, 0, 255)))
             .with_devtools(true)
             .build_as_child(&window)
-            .unwrap());
-
-        webview.open_devtools();
+            .unwrap();
+        self.webview.replace(webview);
     }
 }
 
