@@ -1,3 +1,5 @@
+use std::ffi::c_void;
+use std::mem::transmute;
 use std::num::{NonZero, NonZeroIsize};
 use std::ptr::NonNull;
 use godot::classes::display_server::HandleType;

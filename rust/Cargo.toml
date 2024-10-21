@@ -9,4 +9,4 @@ crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }
 raw-window-handle = "0.6.2"
-wry = "0.46.2"
+wry = { version = "0.46.2", features = ["transparent"] }

@@ -1,9 +1,10 @@
 mod godot_window;
 
 use godot::prelude::*;
-use godot::classes::{IDisplayServer, ISprite2D, Sprite2D};
-use wry::{RGBA, WebViewBuilder, Rect};
+use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Sprite2D};
+use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{LogicalPosition, LogicalSize};
+use wry::http::HeaderMap;
 use crate::godot_window::GodotWindow;
 
 struct GodotWRY;
@@ -43,36 +44,100 @@ impl ISprite2D for Player {
 }
 
 #[derive(GodotClass)]
-#[class(base=Node)]
+#[class(base=Control)]
 struct WebView {
-    base: Base<Node>,
+    base: Base<Control>,
     webview: Option<wry::WebView>,
+    #[export]
+    full_window_size: bool,
+    #[export]
+    url: GString,
+    #[export]
+    html: GString,
+    #[export]
+    transparent: bool,
+    #[export]
+    background_color: Color,
+    #[export]
+    devtools: bool,
+    #[export]
+    headers: Dictionary,
+    #[export]
+    user_agent: GString,
+    #[export]
+    zoom_hotkeys: bool,
+    #[export]
+    clipboard: bool,
+    #[export]
+    incognito: bool,
+    #[export]
+    focused: bool,
 }
 
 #[godot_api]
-impl INode for WebView {
-    fn init(base: Base<Node>) -> Self {
+impl IControl for WebView {
+    fn init(base: Base<Control>) -> Self {
         godot_print!("Hello, webview renderer!");
         Self {
             base,
             webview: None,
+            full_window_size: false,
+            url: "https://github.com/doceazedo/godot_wry".into(),
+            html: "".into(),
+            transparent: false,
+            background_color: Color::from_rgb(1.0, 1.0, 1.0),
+            devtools: true,
+            headers: Dictionary::new(),
+            user_agent: "".into(),
+            zoom_hotkeys: false,
+            clipboard: true,
+            incognito: false,
+            focused: true,
         }
     }
 
     fn ready(&mut self) {
         godot_print!("webview is ready");
         let window = GodotWindow;
-        let webview = WebViewBuilder::new()
-            .with_url("https://github.com/doceazedo")
-            .with_bounds(Rect {
-                position: LogicalPosition::new(300, 100).into(),
+        let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
+            url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
+            html: if self.url.is_empty() { Some(String::from(&self.html)) } else { None },
+            transparent: self.transparent,
+            background_color: Some(RGBA::from((
+                self.background_color.r as u8 * 255,
+                self.background_color.g as u8 * 255,
+                self.background_color.b as u8 * 255,
+                self.background_color.a as u8 * 255
+            ))),
+            devtools: self.devtools,
+            // headers: Some(HeaderMap::try_from(self.headers.iter_shared().typed::<GString, Variant>()).unwrap_or_default()),
+            user_agent: Some(String::from(&self.user_agent)),
+            zoom_hotkeys_enabled: self.zoom_hotkeys,
+            clipboard: self.clipboard,
+            incognito: self.incognito,
+            focused: self.focused,
+            bounds: Option::from(Rect {
+                position: LogicalPosition::new(0, 0).into(),
                 size: LogicalSize::new(640, 360).into(),
-            })
-            .with_transparent(true)
-            .with_background_color(RGBA::from((0, 255, 0, 255)))
-            .with_devtools(true)
-            .build_as_child(&window)
-            .unwrap();
+            }),
+            ..Default::default()
+        });
+
+        godot_print!("RGBA: {} {} {} {}", self.background_color.r as u8 * 255,
+                self.background_color.g as u8 * 255,
+                self.background_color.b as u8 * 255,
+                self.background_color.a as u8 * 255);
+
+        if !self.url.is_empty() && !self.html.is_empty() {
+            godot_error!("You have entered both a URL and HTML code. You may only enter one at a time.")
+        }
+
+        let webview = if self.full_window_size {
+            webview_builder.build(&window).unwrap()
+        } else {
+            webview_builder.build_as_child(&window).unwrap()
+        };
+
         self.webview.replace(webview);
     }
 }
