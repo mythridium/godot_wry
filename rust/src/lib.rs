@@ -81,7 +81,7 @@ impl IControl for WebView {
         Self {
             base,
             webview: None,
-            full_window_size: false,
+            full_window_size: true,
             url: "https://github.com/doceazedo/godot_wry".into(),
             html: "".into(),
             transparent: false,
@@ -97,7 +97,6 @@ impl IControl for WebView {
     }
 
     fn ready(&mut self) {
-        godot_print!("webview is ready");
         let window = GodotWindow;
         let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
             url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
@@ -116,17 +115,15 @@ impl IControl for WebView {
             clipboard: self.clipboard,
             incognito: self.incognito,
             focused: self.focused,
-            bounds: Option::from(Rect {
-                position: LogicalPosition::new(0, 0).into(),
-                size: LogicalSize::new(640, 360).into(),
-            }),
+            bounds: if !self.full_window_size {
+                let rect = self.base().get_global_rect();
+                Option::from(Rect {
+                    position: LogicalPosition::new(rect.position.x, rect.position.y).into(),
+                    size: LogicalSize::new(rect.size.x, rect.size.y).into(),
+                })
+            } else { None },
             ..Default::default()
         });
-
-        godot_print!("RGBA: {} {} {} {}", self.background_color.r as u8 * 255,
-                self.background_color.g as u8 * 255,
-                self.background_color.b as u8 * 255,
-                self.background_color.a as u8 * 255);
 
         if !self.url.is_empty() && !self.html.is_empty() {
             godot_error!("You have entered both a URL and HTML code. You may only enter one at a time.")
