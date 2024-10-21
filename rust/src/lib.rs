@@ -1,14 +1,10 @@
-use std::ffi::c_void;
-use std::mem::{transmute};
-use std::ptr::NonNull;
+mod godot_window;
+
 use godot::prelude::*;
-use godot::classes::{DisplayServer, IDisplayServer, ISprite2D, Sprite2D};
-use godot::classes::display_server::HandleType;
-use raw_window_handle::{AppKitWindowHandle, HasRawWindowHandle, RawWindowHandle};
-use wry::raw_window_handle::{HandleError, HasWindowHandle, WindowHandle};
+use godot::classes::{IDisplayServer, ISprite2D, Sprite2D};
 use wry::{RGBA, WebViewBuilder, Rect};
-use objc2_foundation::is_main_thread;
 use wry::dpi::{LogicalPosition, LogicalSize};
+use crate::godot_window::GodotWindow;
 
 struct GodotWRY;
 
@@ -78,23 +74,5 @@ impl INode for WebView {
             .build_as_child(&window)
             .unwrap();
         self.webview.replace(webview);
-    }
-}
-
-struct GodotWindow;
-
-impl HasWindowHandle for GodotWindow {
-    fn window_handle(&self) -> Result<WindowHandle<'_>, HandleError> {
-        let display_server = DisplayServer::singleton();
-        let window_handle = display_server.window_get_native_handle(HandleType::WINDOW_VIEW);
-        unsafe {
-            Ok(WindowHandle::borrow_raw(
-                RawWindowHandle::AppKit(AppKitWindowHandle::new({
-                    assert!(is_main_thread(), "can only access AppKit handles on the main thread");
-                    let ptr: *mut c_void = transmute(window_handle);
-                    NonNull::new(ptr).expect("Id<T> should never be null")
-                }))
-            ))
-        }
     }
 }
