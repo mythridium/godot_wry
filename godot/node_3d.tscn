@@ -13,27 +13,11 @@ position = Vector2(528, 301)
 texture = SubResource("PlaceholderTexture2D_necu4")
 
 [node name="WebView" type="WebView" parent="."]
-full_window_size = true
+full_window_size = false
 url = ""
-html = "Hello godot!"
-transparent = false
-background_color = Color(1, 0, 1, 1)
-devtools = true
-headers = {}
-user_agent = ""
-zoom_hotkeys = false
-clipboard = true
-incognito = false
-focused = true
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 418.0
-offset_top = 208.0
-offset_right = 635.0
-offset_bottom = 392.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(16, 13)
+html = "<button onclick=\"window.ipc.postMessage('hello world')\">Hello world!</button><button onclick=\"window.ipc.postMessage('quit-game')\">Quit game</button><input oninput=\"window.ipc.postMessage(`change-title:${this.value}`)\" /><script>document.addEventListener('message', (e) => console.log(e))</script>"
+transparent = true
+offset_right = 428.0
+offset_bottom = 273.0
+
+[connection signal="ipc_message" from="WebView" to="." method="_on_web_view_ipc_message"]

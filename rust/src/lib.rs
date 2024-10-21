@@ -4,7 +4,7 @@ use godot::prelude::*;
 use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Sprite2D};
 use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{LogicalPosition, LogicalSize};
-use wry::http::HeaderMap;
+use wry::http::{HeaderMap, Request};
 use crate::godot_window::GodotWindow;
 
 struct GodotWRY;
@@ -98,16 +98,11 @@ impl IControl for WebView {
 
     fn ready(&mut self) {
         let window = GodotWindow;
+        let base = self.base().clone();
         let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
             url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
             html: if self.url.is_empty() { Some(String::from(&self.html)) } else { None },
             transparent: self.transparent,
-            background_color: Some(RGBA::from((
-                self.background_color.r as u8 * 255,
-                self.background_color.g as u8 * 255,
-                self.background_color.b as u8 * 255,
-                self.background_color.a as u8 * 255
-            ))),
             devtools: self.devtools,
             // headers: Some(HeaderMap::try_from(self.headers.iter_shared().typed::<GString, Variant>()).unwrap_or_default()),
             user_agent: Some(String::from(&self.user_agent)),
@@ -123,6 +118,9 @@ impl IControl for WebView {
                 })
             } else { None },
             ..Default::default()
+        }).with_ipc_handler(move |req: Request<String>| {
+            let body = req.body().as_str();
+            base.clone().emit_signal("ipc_message".into(), &[body.to_variant()]);
         });
 
         if !self.url.is_empty() && !self.html.is_empty() {
@@ -136,5 +134,20 @@ impl IControl for WebView {
         };
 
         self.webview.replace(webview);
+    }
+}
+
+#[godot_api]
+impl WebView {
+    #[signal]
+    fn ipc_message(message: GString);
+
+    #[func]
+    fn post_message(&self, message: GString) {
+        if let Some(webview) = &self.webview {
+            let message = str::replace(&*String::from(message), "'", "\\'");
+            let script = str::replace("document.dispatchEvent(new CustomEvent('message', { detail: '{}' }))", "{}", &*message);
+            let _ = webview.evaluate_script(&*script);
+        }
     }
 }
