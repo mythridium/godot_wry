@@ -12,3 +12,6 @@ macos.debug =            "res://../rust/target/debug/libgodot_wry.dylib"
 macos.release =          "res://../rust/target/release/libgodot_wry.dylib"
 macos.debug.arm64 =      "res://../rust/target/debug/libgodot_wry.dylib"
 macos.release.arm64 =    "res://../rust/target/release/libgodot_wry.dylib"
+
+[icons]
+WebView = "res://icons/webview.svg"
