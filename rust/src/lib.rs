@@ -1,12 +1,12 @@
 use std::ffi::c_void;
-use std::mem::transmute;
+use std::mem::{transmute, ManuallyDrop};
 use std::ptr::NonNull;
 use godot::prelude::*;
 use godot::classes::{DisplayServer, IDisplayServer, ISprite2D, Sprite2D};
 use godot::classes::display_server::HandleType;
 use raw_window_handle::{AppKitWindowHandle, HasRawWindowHandle, RawWindowHandle};
-use wry::raw_window_handle::{HandleError, HasRawDisplayHandle, HasWindowHandle, RawDisplayHandle, WindowHandle};
-use wry::{Error, Rect, RGBA, WebViewBuilder, WebViewExtMacOS};
+use wry::raw_window_handle::{HandleError, HasWindowHandle, WindowHandle};
+use wry::{RGBA, WebViewBuilder, Rect};
 use objc2_foundation::is_main_thread;
 use wry::dpi::{LogicalPosition, LogicalSize};
 
@@ -62,16 +62,19 @@ impl INode for WebView {
     }
 
     fn ready(&mut self) {
+        godot_print!("webview is ready");
         let window = GodotWindow;
-        let webview = WebViewBuilder::new_as_child(&window)
-            .with_url("https://example.com")
+        let webview = ManuallyDrop::new(WebViewBuilder::new()
+            .with_url("https://github.com/doceazedo")
+            .with_bounds(Rect {
+                position: LogicalPosition::new(300, 100).into(),
+                size: LogicalSize::new(640, 360).into(),
+            })
+            .with_transparent(true)
             .with_background_color(RGBA::from((0, 255, 0, 255)))
             .with_devtools(true)
-            .build()
-            .unwrap();
-
-        let mut ns_window = webview.ns_window();
-        unsafe { ns_window.orderFrontRegardless(); }
+            .build_as_child(&window)
+            .unwrap());
 
         webview.open_devtools();
     }

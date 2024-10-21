@@ -5,8 +5,8 @@ size = Vector2(64, 64)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="WebView" type="WebView" parent="."]
-
 [node name="Player" type="Player" parent="."]
 position = Vector2(528, 301)
 texture = SubResource("PlaceholderTexture2D_necu4")
+
+[node name="WebView" type="WebView" parent="."]
