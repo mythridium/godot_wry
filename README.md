@@ -6,18 +6,15 @@
 
 <p align="center">
   <a href="https://doceazedo.com">
-    <img src="assets/screenshot.gif">
+    <img src="assets/screenshot-7.png">
   </a>
 </p>
 
-## Download
+## 📥 Download
 
-> [!WARNING]  
-> This extension is in active development and may be released soon.
+You can download the extension directly on the [Godot Asset Library](https://godotengine.org/asset-library/asset/3426) or by navigating to the "AssetLib" tab in the editor and searching for "wry".
 
-## Getting started
-
-After installing the extension, usage is as simple as adding a **WebView** node to your scene.
+Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_wry/releases) page, download the latest ZIP (_not_ the source code) and import it manually into your project.
 
 ## Supported platforms
 
@@ -40,6 +37,14 @@ WRY requires [WebKitGTK](https://webkitgtk.org). So you need to make sure it is 
 ### Android/iOS
 
 WRY already has [mobile support](https://github.com/tauri-apps/wry?tab=readme-ov-file#android--ios). Contributions to implement Android and iOS are very welcome!
+
+## 🧰 Getting started
+
+After installing the extension, you will now be able to see the **WebView** node inside `Node → CanvasItem → Control` when creating a new node. You can edit it's properties and layout as you wish.
+
+| ![](assets/create-new-node.png)                       | ![](assets/inspector.png)                      |
+| ----------------------------------------------------- | ---------------------------------------------- |
+| <p align="center"><i>"Create new node" window</i></p> | <p align="center"><i>WebView inspector</i></p> |
 
 ## Interop between WebView and Godot
 
