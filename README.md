@@ -12,7 +12,7 @@ You can download the extension directly on the [Godot Asset Library](https://god
 
 Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_wry/releases) page, download the latest ZIP (_not_ the source code) and import it manually into your project.
 
-## Supported platforms
+## ⚙️ Supported platforms
 
 | Platform    | Support             | Web engine                 |
 | ----------- | ------------------- | -------------------------- |
@@ -42,7 +42,7 @@ After installing the extension, you will now be able to see the **WebView** node
 | ----------------------------------------------------- | ---------------------------------------------- |
 | <p align="center"><i>"Create new node" window</i></p> | <p align="center"><i>WebView inspector</i></p> |
 
-## Interop between WebView and Godot
+## 🔄 Interop between WebView and Godot
 
 Godot and the WebView can exchange messages with each other. This is useful for updating the UI data, or triggering game actions when interacting with the UI.
 
@@ -76,7 +76,7 @@ document.addEventListener("message", (event) => {
 });
 ```
 
-## Caveats
+## 🚧 Caveats
 
 Since WRY utilizes the system's native webview for HTML rendering, the results may vary across different platforms, similar to how a website might appear or behave differently in Chrome versus Safari.
 
@@ -84,7 +84,7 @@ It's important to note that WRY renders the webview directly within the window. 
 
 If these limitations are significant for your use case, consider alternatives like [gdcef](https://github.com/Lecrapouille/gdcef) or [godot-webview](https://godotwebview.com/).
 
-## TO-DO
+## 📝 TO-DO
 
 > [!WARNING]  
 > This extension is in active development, broken stuff is expected and contributions are appreciated!
@@ -95,6 +95,6 @@ If these limitations are significant for your use case, consider alternatives li
 - Fix transparency when `full_window_size` is enabled
 - Platform support
 
-## License
+## 📚 License
 
 The Godot WRY extension is license under MIT. WRY is licensed under Apache-2.0/MIT.
