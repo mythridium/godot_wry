@@ -96,4 +96,4 @@ If these limitations are significant for your use case, consider alternatives li
 
 ## License
 
-Apache-2.0/MIT
+The Godot WRY extension is license under MIT. WRY is licensed under Apache-2.0/MIT.
