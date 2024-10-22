@@ -19,7 +19,7 @@ for target in "${targets[@]}"; do
 
   printf "Copying binaries...\n"
   mkdir -p "dist/addons/godot_wry/bin/$target"
-  cp -a "rust/target/$target/release/." "dist/addons/godot_wry/bin/$target"
+  find "rust/target/$target/release" \( -name "*.dylib" -o -name "*.dll" \) -exec cp {} "dist/addons/godot_wry/bin/$target" \;
 
   printf "Built target $target successfully!\n"
 done
