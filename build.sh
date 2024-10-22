@@ -11,7 +11,6 @@ rm -rf dist/* 2> /dev/null
 mkdir -p "dist"
 
 printf "Copying project files...\n"
-cp godot/project.godot "dist"
 cp -a godot/addons "dist/addons"
 
 for target in "${targets[@]}"; do
