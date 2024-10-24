@@ -1,0 +1,68 @@
+on:
+  push:
+    branches: main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: main
+
+name: 🤖 GDExtension
+
+jobs:
+  build:
+    name: 🏗️ Build / ${{ matrix.platform.os-name }}
+    strategy:
+      matrix:
+        platform:
+          - os-name: 🐧 Linux 64-bit
+            runs-on: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os-name: 🍎 macOS ARM64
+            runs-on: macos-latest
+            target: aarch64-apple-darwin
+          - os-name: 🪟 Windows 64-bit
+            runs-on: windows-latest
+            target: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.platform.runs-on }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        if: ${{ matrix.platform.target == 'x86_64-unknown-linux-gnu' }}
+        run: sudo apt-get update && sudo apt-get install libgtk-3-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libjavascriptcoregtk-4.1-dev
+      - name: Build binaries
+        uses: houseabsolute/actions-rust-cross@v0
+        with:
+          working-directory: "rust"
+          command: ${{ matrix.platform.command }}
+          target: ${{ matrix.platform.target }}
+          args: "--locked --release"
+          strip: true
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform.target }}
+          path: |
+            rust/target/${{ matrix.platform.target }}/release/*.dll
+            rust/target/${{ matrix.platform.target }}/release/*.so
+            rust/target/${{ matrix.platform.target }}/release/*.dylib
+
+  zip:
+    name: 📦 Package
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: godot/addons/godot_wry/bin
+      - name: Clean files
+        run: rm -rf godot/project.godot 2> /dev/null
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot_wry
+          path: godot
+
+  #TODO: release:
