@@ -14,3 +14,4 @@ export_presets.cfg
 
 dist/
 bin/
+.DS_Store
