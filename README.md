@@ -34,7 +34,7 @@ WRY depends on [WebKitGTK](https://webkitgtk.org) to be installed to work on Lin
 
 ### Android/iOS
 
-WRY already has upstream [mobile support](https://github.com/tauri-apps/wry?tab=readme-ov-file#android--ios). Contributions to implement Android and iOS in this extension are very welcome!
+WRY already offers upstream [mobile support](https://github.com/tauri-apps/wry/blob/dev/MOBILE.md). Contributions for implementing support for Android and iOS in this extension are very welcome.
 
 ## 🧰 Getting started
 
@@ -93,12 +93,13 @@ Godot WRY does _not_ perform dependency checks. As of right now, game developers
 > [!WARNING]  
 > This extension is in active development, broken stuff is expected and contributions are appreciated!
 
+These features should soon be completed before the 1.0.0 release:
+
 - Load URLs from Godot project files via `res://`
 - React to property changes (such as changing the URL, size and visibility)
 - Implement JS evaluation
 - Fix transparency when `full_window_size` is enabled
-- Platform support
 
 ## 📚 License
 
-The Godot WRY extension is license under MIT. WRY is licensed under Apache-2.0/MIT.
+The Godot WRY extension is licensed under MIT. WRY is licensed under Apache-2.0/MIT.
