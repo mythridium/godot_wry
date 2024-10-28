@@ -677,6 +677,7 @@ name = "godot_wry"
 version = "0.1.0"
 dependencies = [
  "godot",
+ "gtk",
  "raw-window-handle",
  "wry",
 ]

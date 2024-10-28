@@ -1,8 +1,10 @@
 mod godot_window;
 
+use std::thread;
 use godot::prelude::*;
 use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Sprite2D};
-use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
+use gtk::gdk::keys::constants::Option;
+use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes, WebViewBuilderExtUnix};
 use wry::dpi::{LogicalPosition, LogicalSize};
 use wry::http::{HeaderMap, Request};
 use crate::godot_window::GodotWindow;
@@ -61,6 +63,14 @@ impl IControl for WebView {
             clipboard: true,
             incognito: false,
             focused: true,
+        }
+    }
+
+    #[cfg(target_os = "linux")]
+    fn process(&mut self, _delta: f64) {
+        if self.webview.is_none().clone() { return }
+        while gtk::events_pending() {
+            gtk::main_iteration_do(false);
         }
     }
 

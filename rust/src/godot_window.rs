@@ -4,6 +4,7 @@ use std::num::{NonZero, NonZeroIsize};
 use std::ptr::NonNull;
 use godot::classes::display_server::HandleType;
 use godot::classes::DisplayServer;
+use godot::global::godot_print;
 use raw_window_handle::{AppKitWindowHandle, HandleError, HasWindowHandle, RawWindowHandle, Win32WindowHandle, WindowHandle, XlibWindowHandle};
 
 pub struct GodotWindow;
@@ -39,7 +40,9 @@ impl HasWindowHandle for GodotWindow {
 
     #[cfg(target_os = "linux")]
     fn window_handle(&self) -> Result<WindowHandle<'_>, HandleError> {
-        gtk::init().unwrap();
+        gtk::init().expect("Failed to initialize gtk");
+        godot_print!("gtk is initialized");
+
         let display_server = DisplayServer::singleton();
         let window_handle = display_server.window_get_native_handle(HandleType::WINDOW_HANDLE);
         unsafe {
