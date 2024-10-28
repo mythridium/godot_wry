@@ -14,19 +14,21 @@ Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_w
 
 ## ⚙️ Supported platforms
 
-| Platform    | Support      | Web engine                 |
-| ----------- | ------------ | -------------------------- |
-| **Windows** | ✅ Supported | WebView2 (Chromium)        |
-| **Mac**     | ✅ Supported | WebKit                     |
-| **Linux**   | ✅ Supported | WebKitGTK                  |
-| **Android** | 🚧 Planned   | Android WebView (Chromium) |
-| **iOS**     | 🚧 Planned   | WebKit                     |
+| Platform    | Support             | Web engine                 |
+|-------------|---------------------|----------------------------|
+| **Windows** | ✅ Supported         | WebView2 (Chromium)        |
+| **Mac**     | ✅ Supported         | WebKit                     |
+| **Linux**   | 🔄 Work in progress | WebKitGTK                  |
+| **Android** | 🚧 Planned          | Android WebView (Chromium) |
+| **iOS**     | 🚧 Planned          | WebKit                     |
 
 ### Windows
 
-⁠Windows 7, 8 and 8.1 are not supported since February 2024 with Rust 1.76, even tho WRY still supports them.
+Windows 7, 8 and 8.1 are not supported since February 2024 with Rust 1.76, even tho WRY still supports them.
 
 On Windows 10 (Version 1803 and later) and Windows 11, the [WebView2 runtime](https://developer.microsoft.com/microsoft-edge/webview2) is distributed as part of the operating system.
+
+**Needs to be tested.**
 
 ### Linux
 
