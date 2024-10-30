@@ -4,7 +4,7 @@ use std::thread;
 use godot::prelude::*;
 use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Sprite2D};
 use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
-use wry::dpi::{LogicalPosition, LogicalSize};
+use wry::dpi::{LogicalPosition, LogicalSize, PhysicalPosition, PhysicalSize};
 use wry::http::{HeaderMap, Request};
 use crate::godot_window::GodotWindow;
 
@@ -87,13 +87,6 @@ impl IControl for WebView {
             clipboard: self.clipboard,
             incognito: self.incognito,
             focused: self.focused,
-            bounds: if !self.full_window_size {
-                let rect = self.base().get_global_rect();
-                Option::from(Rect {
-                    position: LogicalPosition::new(rect.position.x, rect.position.y).into(),
-                    size: LogicalSize::new(rect.size.x, rect.size.y).into(),
-                })
-            } else { None },
             ..Default::default()
         }).with_ipc_handler(move |req: Request<String>| {
             let body = req.body().as_str();
@@ -104,13 +97,13 @@ impl IControl for WebView {
             godot_error!("You have entered both a URL and HTML code. You may only enter one at a time.")
         }
 
-        let webview = if self.full_window_size {
-            webview_builder.build(&window).unwrap()
-        } else {
-            webview_builder.build_as_child(&window).unwrap()
-        };
-
+        let webview = webview_builder.build_as_child(&window).unwrap();
         self.webview.replace(webview);
+
+        let mut viewport = self.base().get_tree().expect("Could not get tree").get_root().expect("Could not get viewport");
+        viewport.connect("size_changed".into(), Callable::from_object_method(&*self.base(), "resize"));
+
+        self.resize()
     }
 }
 
@@ -125,6 +118,26 @@ impl WebView {
             let message = str::replace(&*String::from(message), "'", "\\'");
             let script = str::replace("document.dispatchEvent(new CustomEvent('message', { detail: '{}' }))", "{}", &*message);
             let _ = webview.evaluate_script(&*script);
+        }
+    }
+
+    #[func]
+    fn resize(&self) {
+        if let Some(webview) = &self.webview {
+            let rect = if self.full_window_size {
+                let viewport_size = self.base().get_tree().expect("Could not get tree").get_root().expect("Could not get viewport").get_size();
+                Rect {
+                    position: PhysicalPosition::new(0, 0).into(),
+                    size: PhysicalSize::new(viewport_size.x, viewport_size.y).into(),
+                }
+            } else {
+                let rect = self.base().get_global_rect();
+                Rect {
+                    position: PhysicalPosition::new(rect.position.x, rect.position.y).into(),
+                    size: PhysicalSize::new(rect.size.x, rect.size.y).into(),
+                }
+            };
+            let _ = webview.set_bounds(rect);
         }
     }
 }
