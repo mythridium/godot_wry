@@ -15,9 +15,9 @@ Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_w
 ## ⚙️ Supported platforms
 
 | Platform    | Support             | Web engine                 |
-|-------------|---------------------|----------------------------|
-| **Windows** | ✅ Supported         | WebView2 (Chromium)        |
-| **Mac**     | ✅ Supported         | WebKit                     |
+| ----------- | ------------------- | -------------------------- |
+| **Windows** | ✅ Supported        | WebView2 (Chromium)        |
+| **Mac**     | ✅ Supported        | WebKit                     |
 | **Linux**   | 🔄 Work in progress | WebKitGTK                  |
 | **Android** | 🚧 Planned          | Android WebView (Chromium) |
 | **iOS**     | 🚧 Planned          | WebKit                     |
@@ -80,6 +80,10 @@ document.addEventListener("message", (event) => {
 });
 ```
 
+## 📌 Other features
+
+- Load files from `res://`
+
 ## 🚧 Caveats
 
 Since WRY utilizes the system's native webview for HTML rendering, the results may vary across different platforms, similar to how a website might appear or behave differently in Chrome versus Safari.
@@ -97,8 +101,7 @@ Godot WRY does _not_ perform dependency checks. As of right now, game developers
 
 These features should soon be completed before the 1.0.0 release:
 
-- Load URLs from Godot project files via `res://`
-- React to property changes (such as changing the URL, size and visibility)
+- React to property changes (such as changing the URL and visibility)
 - Implement JS evaluation
 - Fix transparency when `full_window_size` is enabled
 

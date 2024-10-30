@@ -1,12 +1,17 @@
 mod godot_window;
+mod protocols;
 
-use std::thread;
+use std::path::PathBuf;
+use std::{fs, thread};
 use godot::prelude::*;
-use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Sprite2D};
+use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Os, ProjectSettings, Sprite2D};
+use http::header::CONTENT_TYPE;
+use http::Response;
 use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{LogicalPosition, LogicalSize, PhysicalPosition, PhysicalSize};
 use wry::http::{HeaderMap, Request};
 use crate::godot_window::GodotWindow;
+use crate::protocols::get_res_response;
 
 struct GodotWRY;
 
@@ -88,10 +93,14 @@ impl IControl for WebView {
             incognito: self.incognito,
             focused: self.focused,
             ..Default::default()
-        }).with_ipc_handler(move |req: Request<String>| {
-            let body = req.body().as_str();
-            base.clone().emit_signal("ipc_message".into(), &[body.to_variant()]);
-        });
+        })
+            .with_ipc_handler(move |req: Request<String>| {
+                let body = req.body().as_str();
+                base.clone().emit_signal("ipc_message".into(), &[body.to_variant()]);
+            })
+            .with_custom_protocol(
+                "res".into(), move |_webview_id, request| get_res_response(request),
+            );
 
         if !self.url.is_empty() && !self.html.is_empty() {
             godot_error!("You have entered both a URL and HTML code. You may only enter one at a time.")
