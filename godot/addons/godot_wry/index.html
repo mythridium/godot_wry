@@ -19,5 +19,20 @@
       Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
       sans-serif;
   }
+
+  h1.is-focused {
+    color: greenyellow;
+  }
 </style>
 <h1>Hello res://!</h1>
+<script>
+  (() => {
+    setInterval(() => {
+      if (document.hasFocus()) {
+        document.querySelector("h1").classList.add("is-focused");
+        return;
+      }
+      document.querySelector("h1").classList.remove("is-focused");
+    }, 100);
+  })();
+</script>

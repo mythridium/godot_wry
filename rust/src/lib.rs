@@ -46,7 +46,9 @@ struct WebView {
     #[export]
     incognito: bool,
     #[export]
-    focused: bool,
+    focused_when_created: bool,
+    #[export]
+    allow_interactions_without_focus: bool,
 }
 
 #[godot_api]
@@ -66,13 +68,18 @@ impl IControl for WebView {
             zoom_hotkeys: false,
             clipboard: true,
             incognito: false,
-            focused: true,
+            focused_when_created: true,
+            allow_interactions_without_focus: true,
         }
     }
 
-    #[cfg(target_os = "linux")]
     fn process(&mut self, _delta: f64) {
-        if self.webview.is_none().clone() { return }
+        if self.webview.is_none() { return }
+        if self.allow_interactions_without_focus {
+            let webview = self.webview.as_ref().unwrap();
+            webview.focus_parent().unwrap();
+        }
+        #[cfg(target_os = "linux")]
         while gtk::events_pending() {
             gtk::main_iteration_do(false);
         }
@@ -91,7 +98,7 @@ impl IControl for WebView {
             zoom_hotkeys_enabled: self.zoom_hotkeys,
             clipboard: self.clipboard,
             incognito: self.incognito,
-            focused: self.focused,
+            focused: self.focused_when_created,
             ..Default::default()
         })
             .with_ipc_handler(move |req: Request<String>| {
@@ -103,7 +110,11 @@ impl IControl for WebView {
             );
 
         if !self.url.is_empty() && !self.html.is_empty() {
-            godot_error!("You have entered both a URL and HTML code. You may only enter one at a time.")
+            godot_error!("[Godot WRY] You have entered both a URL and HTML code. You may only enter one at a time.")
+        }
+
+        if self.allow_interactions_without_focus {
+            godot_print_rich!("[color=cornflowerblue][Godot WRY] The property \"Allow interactions without focus\" is enabled. This forwards input events to the engine by preventing the webview from retaining focus, but may break focus-dependent HTML elements like <input> or <textarea>. Disable if persistent focus is needed.[/color]")
         }
 
         let webview = webview_builder.build_as_child(&window).unwrap();
