@@ -103,7 +103,6 @@ These features should soon be completed before the 1.0.0 release:
 
 - React to property changes (such as changing the URL and visibility)
 - Implement JS evaluation
-- Fix transparency when `full_window_size` is enabled
 
 ## 📚 License
 
