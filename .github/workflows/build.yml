@@ -58,11 +58,13 @@ jobs:
         with:
           path: godot/addons/godot_wry/bin
       - name: Clean files
-        run: rm -rf godot/project.godot 2> /dev/null
+        run: |
+          mkdir -p package/godot_wry
+          mv godot/addons package/godot_wry
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: godot_wry
-          path: godot
+          path: package
 
   #TODO: release:
