@@ -74,17 +74,17 @@ impl IPanel for WebView {
 
     fn process(&mut self, _delta: f64) {
         if self.webview.is_none() { return }
-        
+
         if self.allow_interactions_without_focus {
             let webview = self.webview.as_ref().unwrap();
             webview.focus_parent().unwrap();
         }
-        
+
         if self.base().get_screen_position() != self.previous_screen_position {
             self.previous_screen_position = self.base().get_screen_position();
             self.resize();
         }
-        
+
         #[cfg(target_os = "linux")]
         while gtk::events_pending() {
             gtk::main_iteration_do(false);
@@ -130,6 +130,7 @@ impl IPanel for WebView {
         viewport.connect("size_changed", &Callable::from_object_method(&*self.base(), "resize"));
 
         self.base().clone().connect("resized", &Callable::from_object_method(&*self.base(), "resize"));
+        self.base().clone().connect("visibility_changed", &Callable::from_object_method(&*self.base(), "update_visibility"));
 
         self.resize()
     }
@@ -176,6 +177,15 @@ impl WebView {
     fn eval(&self, script: GString) {
         if let Some(webview) = &self.webview {
             let _ = webview.evaluate_script(&*String::from(script));
+        }
+    }
+
+    #[func]
+    fn update_visibility(&self) {
+        if let Some(webview) = &self.webview {
+            let visibility = self.base().is_visible_in_tree();
+            webview.set_visible(visibility).expect("Could not set visibility");
+            self.resize()
         }
     }
 }
