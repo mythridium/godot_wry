@@ -9,9 +9,9 @@ pub fn get_res_response(
     request: Request<Vec<u8>>,
 ) -> Response<Cow<'static, [u8]>> {
     let os = Os::singleton();
-    let root = if os.has_feature("editor".into()) {
+    let root = if os.has_feature("editor") {
         let project_settings = ProjectSettings::singleton();
-        PathBuf::from(String::from(project_settings.globalize_path("res://".into())))
+        PathBuf::from(String::from(project_settings.globalize_path("res://")))
     } else {
         let mut dir = PathBuf::from(String::from(os.get_executable_path()));
         dir.pop();

@@ -1,15 +1,12 @@
 mod godot_window;
 mod protocols;
 
-use std::path::PathBuf;
-use std::{fs, thread};
+use godot::init::*;
 use godot::prelude::*;
-use godot::classes::{Control, IControl, IDisplayServer, ISprite2D, Os, ProjectSettings, Sprite2D};
-use http::header::CONTENT_TYPE;
-use http::Response;
-use wry::{RGBA, WebViewBuilder, Rect, WebViewAttributes};
-use wry::dpi::{LogicalPosition, LogicalSize, PhysicalPosition, PhysicalSize};
-use wry::http::{HeaderMap, Request};
+use godot::classes::{Control, IControl};
+use wry::{WebViewBuilder, Rect, WebViewAttributes};
+use wry::dpi::{PhysicalPosition, PhysicalSize};
+use wry::http::Request;
 use crate::godot_window::GodotWindow;
 use crate::protocols::get_res_response;
 
@@ -103,7 +100,7 @@ impl IControl for WebView {
         })
             .with_ipc_handler(move |req: Request<String>| {
                 let body = req.body().as_str();
-                base.clone().emit_signal("ipc_message".into(), &[body.to_variant()]);
+                base.clone().emit_signal("ipc_message", &[body.to_variant()]);
             })
             .with_custom_protocol(
                 "res".into(), move |_webview_id, request| get_res_response(request),
@@ -121,7 +118,7 @@ impl IControl for WebView {
         self.webview.replace(webview);
 
         let mut viewport = self.base().get_tree().expect("Could not get tree").get_root().expect("Could not get viewport");
-        viewport.connect("size_changed".into(), Callable::from_object_method(&*self.base(), "resize"));
+        viewport.connect("size_changed", &Callable::from_object_method(&*self.base(), "resize"));
 
         self.resize()
     }
