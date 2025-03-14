@@ -188,4 +188,82 @@ impl WebView {
             self.resize()
         }
     }
+
+    #[func]
+    fn set_visible(&self, visibility: bool) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.set_visible(visibility);
+        }
+    }
+
+    #[func]
+    fn load_html(&self, html: GString) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.load_html(&*String::from(html));
+        }
+    }
+
+    #[func]
+    fn load_url(&self, url: GString) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.load_url(&*String::from(url));
+        }
+    }
+
+    #[func]
+    fn clear_all_browsing_data(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.clear_all_browsing_data();
+        }
+    }
+
+    #[func]
+    fn close_devtools(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.close_devtools();
+        }
+    }
+
+    #[func]
+    fn open_devtools(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.open_devtools();
+        }
+    }
+
+    #[func]
+    fn is_devtools_open(&self) -> bool {
+        if let Some(webview) = &self.webview {
+            return webview.is_devtools_open();
+        }
+        false
+    }
+
+    #[func]
+    fn focus(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.focus();
+        }
+    }
+
+    #[func]
+    fn focus_parent(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.focus_parent();
+        }
+    }
+
+    #[func]
+    fn print(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.print();
+        }
+    }
+
+    #[func]
+    fn reload(&self) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.reload();
+        }
+    }
 }

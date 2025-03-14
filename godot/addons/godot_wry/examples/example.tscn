@@ -14,10 +14,11 @@ func _process(delta):
 
 func _on_web_view_ipc_message(message):
 	print(\"Just got a message! %s\" % message)
-	$WebView.post_message(\"godot just sent you a reply <3\")
+	$Window/WebView.post_message(\"godot just sent you a reply <3\")
 
 func _on_button_pressed():
-	$Window.visible = !$Window.visible
+	#$Window.visible = !$Window.visible
+	print($Window/WebView.is_devtools_open())
 "
 
 [node name="Node2D" type="Node2D"]
@@ -38,7 +39,7 @@ grow_vertical = 2
 [node name="Button" type="Button" parent="."]
 offset_right = 8.0
 offset_bottom = 8.0
-text = "Toggle visibility"
+text = "Debug"
 
 [connection signal="visibility_changed" from="Window/WebView" to="." method="_on_web_view_visibility_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
