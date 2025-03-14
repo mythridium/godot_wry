@@ -23,8 +23,14 @@ func _on_web_view_ipc_message(message):
 [node name="Node2D" type="Node2D"]
 script = SubResource("GDScript_3s1y3")
 
-[node name="WebView" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 431.0
-offset_bottom = 159.0
+[node name="Window" type="Window" parent="."]
+initial_position = 1
+size = Vector2i(640, 360)
+
+[node name="WebView" type="WebView" parent="Window"]
+full_window_size = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -3,7 +3,7 @@ mod protocols;
 
 use godot::init::*;
 use godot::prelude::*;
-use godot::classes::{Control, IControl};
+use godot::classes::{Panel, IPanel};
 use wry::{WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
@@ -16,10 +16,11 @@ struct GodotWRY;
 unsafe impl ExtensionLibrary for GodotWRY {}
 
 #[derive(GodotClass)]
-#[class(base=Control)]
+#[class(base=Panel)]
 struct WebView {
-    base: Base<Control>,
+    base: Base<Panel>,
     webview: Option<wry::WebView>,
+    previous_screen_position: Vector2,
     #[export]
     full_window_size: bool,
     #[export]
@@ -49,11 +50,12 @@ struct WebView {
 }
 
 #[godot_api]
-impl IControl for WebView {
-    fn init(base: Base<Control>) -> Self {
+impl IPanel for WebView {
+    fn init(base: Base<Panel>) -> Self {
         Self {
             base,
             webview: None,
+            previous_screen_position: Vector2::default(),
             full_window_size: true,
             url: "https://github.com/doceazedo/godot_wry".into(),
             html: "".into(),
@@ -72,10 +74,17 @@ impl IControl for WebView {
 
     fn process(&mut self, _delta: f64) {
         if self.webview.is_none() { return }
+        
         if self.allow_interactions_without_focus {
             let webview = self.webview.as_ref().unwrap();
             webview.focus_parent().unwrap();
         }
+        
+        if self.base().get_screen_position() != self.previous_screen_position {
+            self.previous_screen_position = self.base().get_screen_position();
+            self.resize();
+        }
+        
         #[cfg(target_os = "linux")]
         while gtk::events_pending() {
             gtk::main_iteration_do(false);
@@ -120,6 +129,8 @@ impl IControl for WebView {
         let mut viewport = self.base().get_tree().expect("Could not get tree").get_root().expect("Could not get viewport");
         viewport.connect("size_changed", &Callable::from_object_method(&*self.base(), "resize"));
 
+        self.base().clone().connect("resized", &Callable::from_object_method(&*self.base(), "resize"));
+
         self.resize()
     }
 }
@@ -148,10 +159,13 @@ impl WebView {
                     size: PhysicalSize::new(viewport_size.x, viewport_size.y).into(),
                 }
             } else {
-                let rect = self.base().get_global_rect();
+                let pos = self.base().get_screen_position();
+                let size = self.base().get_size();
+                godot_print!("{}", pos);
+                godot_print!("{}", size);
                 Rect {
-                    position: PhysicalPosition::new(rect.position.x, rect.position.y).into(),
-                    size: PhysicalSize::new(rect.size.x, rect.size.y).into(),
+                    position: PhysicalPosition::new(pos.x, pos.y).into(),
+                    size: PhysicalSize::new(size.x, size.y).into(),
                 }
             };
             let _ = webview.set_bounds(rect);
