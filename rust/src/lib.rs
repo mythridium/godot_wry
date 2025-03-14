@@ -157,4 +157,11 @@ impl WebView {
             let _ = webview.set_bounds(rect);
         }
     }
+
+    #[func]
+    fn eval(&self, script: GString) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.evaluate_script(&*String::from(script));
+        }
+    }
 }
