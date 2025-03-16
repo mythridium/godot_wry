@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://lb77vnusqdq3"]
+
+[ext_resource type="PackedScene" uid="uid://c83173ref27w8" path="res://addons/godot_wry/examples/character_creator_ui_demo/assets/player_placeholder.glb" id="1_5r8qx"]
+[ext_resource type="Script" path="res://addons/godot_wry/examples/character_creator_ui_demo/character_creator.gd" id="1_nf0j5"]
+[ext_resource type="Texture2D" uid="uid://bydf0tcfe034y" path="res://addons/godot_wry/examples/character_creator_ui_demo/assets/cas_gradient.jpg" id="2_87851"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8byrj"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_chwb4"]
+sky_material = SubResource("ProceduralSkyMaterial_8byrj")
+
+[sub_resource type="Environment" id="Environment_2onbo"]
+background_mode = 2
+sky = SubResource("Sky_chwb4")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gnibi"]
+shading_mode = 0
+albedo_texture = ExtResource("2_87851")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ig56q"]
+size = Vector2(16, 9)
+
+[node name="CharacterCreator" type="Node3D"]
+script = ExtResource("1_nf0j5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2onbo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_angular_distance = 45.0
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+fov = 25.0
+
+[node name="Character" parent="." instance=ExtResource("1_5r8qx")]
+transform = Transform3D(0.0978148, -2.68648e-17, 0.0207912, 3.48787e-17, 0.1, -3.48787e-17, -0.0207912, 4.13682e-17, 0.0978148, -0.65, -0.735, -3.25)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2.08165e-12, 2.08165e-12, -10)
+material_override = SubResource("StandardMaterial3D_gnibi")
+mesh = SubResource("PlaneMesh_ig56q")
+
+[node name="WebView" type="WebView" parent="."]
+url = "http://localhost:5173/"
+transparent = true
+
+[connection signal="ipc_message" from="WebView" to="." method="_on_web_view_ipc_message"]
