@@ -19,7 +19,7 @@
 - 🍃 Use the native system webview (no extra dependencies!)
 - 🌎 Load website URLs and local `res://` files
 - 🧩 JavaScript ⇔ GDScript code integration
-- 🚥 Mouse input events forwarding
+- 🚥 Keyboard input events forwarding
 
 ## ⛹️ Demo
 
