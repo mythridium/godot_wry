@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wr13th0qi5qp"
-path="res://.godot/imported/ref.png-ef6ff826ed32ac930655656f53527353.ctex"
+uid="uid://c3a04ieisigww"
+path="res://.godot/imported/top-sweater.png-74946a62729621fed6dc79b96308946b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/godot_wry/examples/character_creator_ui_demo/ui/static/ref.png"
-dest_files=["res://.godot/imported/ref.png-ef6ff826ed32ac930655656f53527353.ctex"]
+source_file="res://addons/godot_wry/examples/character_creator_ui_demo/ui/static/top-sweater.png"
+dest_files=["res://.godot/imported/top-sweater.png-74946a62729621fed6dc79b96308946b.ctex"]
 
 [params]
 

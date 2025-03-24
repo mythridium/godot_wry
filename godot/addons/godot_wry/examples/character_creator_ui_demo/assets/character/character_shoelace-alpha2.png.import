@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsjrobhm6wsw8"
-path.s3tc="res://.godot/imported/player_placeholder_0.jpg-e819bbb27eb71e1b8f74f2f94177b493.s3tc.ctex"
+uid="uid://bm10ogctc0k16"
+path.s3tc="res://.godot/imported/character_shoelace-alpha2.png-e41586c70dfb1dea726b6b139cafd298.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "fa0db2f554b1268cb58fb3cf6c4939de"
+"md5": "18bfc2450d415df6997457c55e60347f"
 }
 
 [deps]
 
-source_file="res://addons/godot_wry/examples/character_creator_ui_demo/assets/player_placeholder_0.jpg"
-dest_files=["res://.godot/imported/player_placeholder_0.jpg-e819bbb27eb71e1b8f74f2f94177b493.s3tc.ctex"]
+source_file="res://addons/godot_wry/examples/character_creator_ui_demo/assets/character/character_shoelace-alpha2.png"
+dest_files=["res://.godot/imported/character_shoelace-alpha2.png-e41586c70dfb1dea726b6b139cafd298.s3tc.ctex"]
 
 [params]
 
