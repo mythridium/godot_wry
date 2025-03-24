@@ -19,10 +19,17 @@
 - 🍃 Use the native system webview (no extra dependencies!)
 - 🌎 Load website URLs and local `res://` files
 - 🧩 JavaScript ⇔ GDScript code integration
-- 🚥 Mouse/keyboard input events forwarding
+- 🚥 Mouse input events forwarding
+
+## ⛹️ Demo
+
+<p align="center">
+  <img src="assets/demo-cas.gif">
+  Demo game UI, available at "<a href="godot/addons/godot_wry/examples/character_creator_ui_demo">examples/character_creator_ui_demo</a>".
+</p>
 
 <details>
-  <summary><b>📸 Screenshots</b></summary>
+  <summary>📸 Other screenshots</summary>
   
   ![](assets/screenshot-7.png)
   ![](assets/screenshot-6.png)
@@ -54,7 +61,7 @@ Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_w
 
 ### Linux
 
-WRY depends on [WebKitGTK](https://webkitgtk.org) to be installed to work on Linux.
+[WebKitGTK](https://webkitgtk.org) is required for WRY to function on Linux. The package name may differ based on the operating system and Linux distribution.
 
 ### Android/iOS
 
