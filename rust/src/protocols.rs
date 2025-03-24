@@ -29,6 +29,9 @@ pub fn get_res_response(
         if full_path.extension().unwrap_or_default() == "js"  {
             mime = String::from("text/javascript")
         }
+        if full_path.extension().unwrap_or_default() == "css"  {
+            mime = String::from("text/css")
+        }
         return http::Response::builder()
             .header(CONTENT_TYPE, mime)
             .status(200)
