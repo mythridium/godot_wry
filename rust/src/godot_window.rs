@@ -41,7 +41,6 @@ impl HasWindowHandle for GodotWindow {
     #[cfg(target_os = "linux")]
     fn window_handle(&self) -> Result<WindowHandle<'_>, HandleError> {
         gtk::init().expect("Failed to initialize gtk");
-        godot_print!("gtk is initialized");
 
         let display_server = DisplayServer::singleton();
         let window_handle = display_server.window_get_native_handle(HandleType::WINDOW_HANDLE);

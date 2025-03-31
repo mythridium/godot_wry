@@ -162,8 +162,6 @@ impl WebView {
             } else {
                 let pos = self.base().get_screen_position();
                 let size = self.base().get_size();
-                godot_print!("{}", pos);
-                godot_print!("{}", size);
                 Rect {
                     position: PhysicalPosition::new(pos.x, pos.y).into(),
                     size: PhysicalSize::new(size.x, size.y).into(),
