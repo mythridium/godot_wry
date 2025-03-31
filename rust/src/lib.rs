@@ -3,7 +3,7 @@ mod protocols;
 
 use godot::init::*;
 use godot::prelude::*;
-use godot::classes::{Panel, IPanel};
+use godot::classes::{Control, IControl};
 use wry::{WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
@@ -16,9 +16,9 @@ struct GodotWRY;
 unsafe impl ExtensionLibrary for GodotWRY {}
 
 #[derive(GodotClass)]
-#[class(base=Panel)]
+#[class(base=Control)]
 struct WebView {
-    base: Base<Panel>,
+    base: Base<Control>,
     webview: Option<wry::WebView>,
     previous_screen_position: Vector2,
     #[export]
@@ -50,8 +50,8 @@ struct WebView {
 }
 
 #[godot_api]
-impl IPanel for WebView {
-    fn init(base: Base<Panel>) -> Self {
+impl IControl for WebView {
+    fn init(base: Base<Control>) -> Self {
         Self {
             base,
             webview: None,
