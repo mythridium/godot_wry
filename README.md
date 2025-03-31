@@ -16,7 +16,7 @@
 
 ## ✨ Features
 
-- 🍃 Use the native system webview (no extra dependencies!)
+- 🍃 Use the native system native webview (no extra dependencies!)
 - 🌎 Load website URLs and local `res://` files
 - 🧩 JavaScript ⇔ GDScript code integration
 - 🚥 Keyboard input events forwarding
@@ -25,7 +25,7 @@
 
 <p align="center">
   <img src="assets/demo-cas.gif">
-  Demo game UI, available at "<a href="godot/addons/godot_wry/examples/character_creator_ui_demo">examples/character_creator_ui_demo</a>".
+  Demo game UI available at "<a href="godot/addons/godot_wry/examples/character_creator_ui_demo">examples/character_creator_ui_demo</a>".
 </p>
 
 <details>
@@ -50,14 +50,14 @@ Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_w
 
 ## 🎯 Supported platforms
 
-| Platform                | Support             | Web engine                 |
-| ----------------------- | ------------------- | -------------------------- |
-| **Windows (10, 11)**    | ✅ Supported        | WebView2 (Chromium)        |
-| **Mac (Apple Silicon)** | ✅ Supported        | WebKit                     |
-| **Linux**               | 🔄 Work in progress | WebKitGTK                  |
-| **Android**             | 🚧 Planned          | Android WebView (Chromium) |
-| **iOS**                 | 🚧 Planned          | WebKit                     |
-| **Browser/HTML5**       | 🚧 Planned          | —                          |
+| Platform                | Support                                                                 | Web engine                 |
+| ----------------------- | ----------------------------------------------------------------------- | -------------------------- |
+| **Windows (10, 11)**    | ✅ Supported                                                            | WebView2 (Chromium)        |
+| **Mac (Apple Silicon)** | ✅ Supported                                                            | WebKit                     |
+| **Linux**               | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
+| **Android**             | ⏳ Planned                                                              | Android WebView (Chromium) |
+| **iOS**                 | ⏳ Planned                                                              | WebKit                     |
+| **Browser/HTML5**       | ⏳ Planned                                                              | —                          |
 
 ### Linux
 
