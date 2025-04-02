@@ -1496,7 +1496,6 @@ mesh = SubResource("PlaneMesh_ig56q")
 [node name="WebView" type="WebView" parent="."]
 url = "res://addons/godot_wry/examples/character_creator_ui_demo/ui/build/index.html"
 transparent = true
-allow_interactions_without_focus = false
 anchors_preset = -1
 anchor_right = 0.256
 anchor_bottom = 0.286

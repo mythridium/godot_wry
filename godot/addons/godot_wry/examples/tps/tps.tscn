@@ -66,7 +66,6 @@ mesh = SubResource("BoxMesh_fpips")
 [node name="WebView" type="WebView" parent="."]
 url = "res://addons/godot_wry/examples/character_creator_ui_demo/ui/build/index.html"
 transparent = true
-allow_interactions_without_focus = false
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 1
