@@ -6,7 +6,6 @@ We're currently working to get Godot WRY into a stable state.
 
 - **🐧 Linux support** ([#17](https://github.com/doceazedo/godot_wry/issues/17))  
   The Linux implementation is already in place, but needs to be tested and adjusted accordingly.
-- **🖱️ Forward mouse input events**
 
 ## ⏳ Planned
 
@@ -19,6 +18,7 @@ We're currently working to get Godot WRY into a stable state.
 
 ## 🚀 Launched
 
+- **🖱️ Forward mouse input events** (`0.0.5`)
 - **⛹️ Demos and examples** (`0.0.4`)
 - **⚡ Expose WRY methods to GDScript** (`0.0.4`)
 - **⌨️ Forward keyboard input events** (`0.0.3`)
