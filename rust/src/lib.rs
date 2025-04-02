@@ -51,8 +51,6 @@ struct WebView {
     #[export]
     focused_when_created: bool,
     #[export]
-    allow_interactions_without_focus: bool,
-    #[export]
     forward_input_events: bool,
 }
 
@@ -75,18 +73,12 @@ impl IControl for WebView {
             clipboard: true,
             incognito: false,
             focused_when_created: true,
-            allow_interactions_without_focus: true,
             forward_input_events: true,
         }
     }
 
     fn process(&mut self, _delta: f64) {
         if self.webview.is_none() { return }
-
-        if self.allow_interactions_without_focus {
-            let webview = self.webview.as_ref().unwrap();
-            webview.focus_parent().unwrap();
-        }
 
         if self.base().get_screen_position() != self.previous_screen_position {
             self.previous_screen_position = self.base().get_screen_position();
@@ -290,10 +282,6 @@ impl IControl for WebView {
 
         if !self.url.is_empty() && !self.html.is_empty() {
             godot_error!("[Godot WRY] You have entered both a URL and HTML code. You may only enter one at a time.")
-        }
-
-        if self.allow_interactions_without_focus {
-            godot_print_rich!("[color=cornflowerblue][Godot WRY] The property \"Allow interactions without focus\" is enabled. This forwards input events to the engine by preventing the webview from retaining focus, but may break focus-dependent HTML elements like <input> or <textarea>. Disable if persistent focus is needed.[/color]")
         }
 
         let webview = webview_builder.build_as_child(&window).unwrap();
