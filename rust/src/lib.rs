@@ -6,6 +6,8 @@ use godot::init::*;
 use godot::prelude::*;
 use godot::classes::{Control, IControl, InputEventMouseButton, InputEventMouseMotion, InputEventKey};
 use godot::global::{Key, MouseButton};
+use raw_window_handle::{HasWindowHandle, RawWindowHandle};
+
 use wry::{WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
@@ -15,6 +17,12 @@ use serde_json;
 use std::sync::Mutex;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
+
+#[cfg(target_os = "windows")]
+use windows::Win32::Foundation::HWND;
+
+#[cfg(target_os = "windows")]
+use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongPtrA, SetWindowLongPtrA, GWL_STYLE};
 
 struct GodotWRY;
 
@@ -115,6 +123,26 @@ impl WebView {
     #[func]
     fn create_webview(&mut self) {
         let window = GodotWindow;
+
+        // remove WS_CLIPCHILDREN from the window style
+        // otherwise, transparent on windows won't work
+        #[cfg(target_os = "windows")]
+        {
+            let handle = window.window_handle().unwrap().as_raw();
+            let raw_handle: HWND = match handle {
+                RawWindowHandle::Win32(win32) => HWND(win32.hwnd.get() as _),
+                _ => {
+                    panic!("Unsupported window handle type");
+                }
+            };
+
+            unsafe {
+                let current_style = GetWindowLongPtrA(raw_handle, GWL_STYLE);
+                // remove WS_CLIPCHILDREN
+                SetWindowLongPtrA(raw_handle, GWL_STYLE, current_style & !0x02000000);
+            };
+        }
+
         let base = self.base().clone();
         let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
             url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
