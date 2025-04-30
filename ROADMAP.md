@@ -18,7 +18,7 @@ We're currently working to get Godot WRY into a stable state.
 
 ## 🚀 Launched
 
-- **🖱️ Forward mouse input events** (`0.0.5`)
+- **🖱️ Forward mouse input events** (`0.0.6`)
 - **⛹️ Demos and examples** (`0.0.4`)
 - **⚡ Expose WRY methods to GDScript** (`0.0.4`)
 - **⌨️ Forward keyboard input events** (`0.0.3`)
