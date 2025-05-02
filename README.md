@@ -5,6 +5,9 @@
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=Godot&message=4.1%2B&color=478CBF&logo=godotengine">
   <img src="https://github.com/doceazedo/godot_wry/actions/workflows/build.yml/badge.svg">
+  <a href="https://discord.gg/B9fWw3raZJ">
+    <img src="https://img.shields.io/static/v1?label=Need%20help%3F&message=Join%20us%20on%20Discord!&color=5865F2&logo=discord">
+  </a>
 </p>
 
 # Godot WRY
