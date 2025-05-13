@@ -1,7 +1,3 @@
----
-outline: [2, 3]
----
-
 # WebView
 
 The fundamental `Control` node to present a webview.
