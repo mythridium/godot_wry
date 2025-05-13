@@ -65,7 +65,10 @@ export default defineConfig({
       },
       {
         text: "API Reference",
-        items: [{ text: "WebView", link: "/reference/webview" }],
+        items: [
+          { text: "WebView", link: "/reference/webview" },
+          { text: "JavaScript", link: "/reference/javascript" },
+        ],
       },
     ],
 

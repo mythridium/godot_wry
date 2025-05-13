@@ -136,7 +136,7 @@ You can execute JavaScript code from Godot using the `eval()` method:
 ```gdscript
 func update_player_health():
 	var message = {
-		"action": "update_player_health",
+		"action": "update_health",
 		"health": 20
 	}
 	$WebView.post_message(JSON.stringify(message))
@@ -146,9 +146,10 @@ func _ready():
 		<progress id="healthBar" value="42" max="100"></progress>
 		<script>
 			document.addEventListener("message", (event) => {
-				if (event.detail.action == "update_player_health") {
+				const data = JSON.parse(event.detail);
+				if (data.action == "update_health") {
 					const healthBar = document.getElementById("healthBar");
-					healthBar.value = event.detail.health;
+					healthBar.value = data.health;
 				}
 			});
 		</script>
