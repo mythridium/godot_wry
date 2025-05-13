@@ -30,7 +30,7 @@ The easiest way to install Godot WRY is through Godot's [Asset Library](https://
 
 ## Rendering webview
 
-Once Godot WRY is installed and enabled, you can add it a [WebView](/reference/webview) node to your scene:
+Once Godot WRY is installed and enabled, you can add a [WebView](/reference/webview) node to your scene:
 
 1. In the Scene panel, click the "+" button or right-click and select "Add Child Node".
 2. Search for "WebView", select it and then click "Create".
@@ -123,15 +123,14 @@ func _on_ipc_message(message):
 		# TODO: handle the data in your game...
 ```
 
-Notice that the message is sent as a JSON string. While any string would be valid, JSON makes it easier to identify message types and send complex data.
+> [!TIP]
+> Notice that the message is sent as a JSON string. While any string would be valid, JSON makes it easier to identify message types and send complex data.
 
 ### From Godot to JavaScript
 
 Similarly, you can also send messages from Godot to your web content using the method [`post_message()`](/reference/webview#post-message) in GDScript.
 
 In this example, let's send a message when the player's health changes, so we can create a HUD with some simple HTML, CSS and JavaScript to display a health bar:
-
-You can execute JavaScript code from Godot using the `eval()` method:
 
 ```gdscript
 func update_player_health():
