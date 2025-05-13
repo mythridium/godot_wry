@@ -6,7 +6,7 @@ API available on the web content rendered by the `WebView`.
 
 ### ipc.postMessage(...)
 
-Sends a message from the JavaScript to Godot. The message _must_ be a string, and the extension may panic otherwise.
+Sends a message from the JavaScript to Godot. The message will be received as a [`ipc_message`](/reference/webview#ipc-message) signal in Godot.
 
 > [!TIP]
 > Using JSON strings are convenient for structured data and handling multiple messages.

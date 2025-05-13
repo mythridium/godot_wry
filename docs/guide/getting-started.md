@@ -95,7 +95,7 @@ A very powerful feature of Godot WRY it the ability to exchange messages between
 
 ### From JavaScript to Godot
 
-You can send messages from JavaScript to Godot using the [`ipc.postMessage()`](/reference/javascript#post-message) function in JavaScript.
+You can send messages from JavaScript to Godot using the [`ipc.postMessage()`](/reference/javascript#ipc-postmessage) function in JavaScript.
 
 First, let's load some HTML with a button to send our message. Make sure to connect to the [`ipc_message`](/reference/webview#ipc-message) so we can retrieve the response later:
 
@@ -127,7 +127,7 @@ Notice that the message is sent as a JSON string. While any string would be vali
 
 ### From Godot to JavaScript
 
-Similarly, you can also send messages from Godot to your web content using the method [`post_message()`](/reference/webview#post_message) in GDScript.
+Similarly, you can also send messages from Godot to your web content using the method [`post_message()`](/reference/webview#post-message) in GDScript.
 
 In this example, let's send a message when the player's health changes, so we can create a HUD with some simple HTML, CSS and JavaScript to display a health bar:
 

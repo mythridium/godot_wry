@@ -23,7 +23,7 @@ The fundamental `Control` node to present a webview.
 ## Methods
 
 > [!TIP]
-> This implementation wraps WRY's [`WebView`](https://docs.rs/wry/latest/wry/struct.WebView.html) interface. Not all WRY features may be implemented but [contributions are always welcome](/contributing/how-to-contribute)!
+> This node gives you GDScript access to WRY's [`WebView`](https://docs.rs/wry/latest/wry/struct.WebView.html) features plus some extra methods. It doesn't match WRY's API exactly. If anything is missing, [contributions are welcome](/contributing/how-to-contribute)!
 
 ### clear_all_browsing_data()
 
@@ -33,7 +33,7 @@ Clears all browsing data (such as cookies, cache, and local storage).
 
 #### API
 
-```py
+```gdscript
 func clear_all_browsing_data() -> void:
 ```
 
@@ -47,7 +47,7 @@ Evaluate and run JavaScript code.
 
 #### Example
 
-```py
+```gdscript
 $WebView.eval("console.log(Math.PI)")
 ```
 
@@ -57,7 +57,7 @@ This will print `3.141592653589793` to the DevTools.
 
 You can call JavaScript code (including asynchronous) and listen to the [`ipc_message`](#ipc-message) signal to retrieve the result:
 
-```py
+```gdscript
 func _on_button_pressed() -> void:
 	$WebView.eval("
 		const resp = await fetch('https://httpbin.org/ip');
@@ -78,7 +78,7 @@ We include an extra `type` field in the message payload to explicitly identify t
 
 #### API
 
-```py
+```gdscript
 func eval(js: String) -> void:
 ```
 
@@ -96,7 +96,7 @@ Tries moving focus to the webview, making it the active element that will receiv
 
 #### API
 
-```py
+```gdscript
 func focus() -> void:
 ```
 
@@ -110,7 +110,7 @@ Tries moving focus away from the webview back to the parent window.
 
 #### API
 
-```py
+```gdscript
 func focus_parent() -> void:
 ```
 
@@ -124,7 +124,7 @@ Returns if the developer tools window is currently open.
 
 #### API
 
-```py
+```gdscript
 func is_devtools_open() -> bool:
 ```
 
@@ -138,7 +138,7 @@ Load HTML content into the webview.
 
 #### API
 
-```py
+```gdscript
 func load_html(html: String) -> void:
 ```
 
@@ -156,7 +156,7 @@ Navigate to the specified URL.
 
 #### API
 
-```py
+```gdscript
 func load_url(url: String) -> void:
 ```
 
@@ -174,7 +174,7 @@ Open the webview's web inspector (usually called DevTools). Only works if the `d
 
 #### API
 
-```py
+```gdscript
 func open_devtools() -> void:
 ```
 
@@ -188,9 +188,46 @@ Closes the webview's web inspector (usually called DevTools) if it's open.
 
 #### API
 
-```py
+```gdscript
 func close_devtools() -> void:
 ```
+
+**Returns:** `void`
+
+### post_message(...)
+
+Sends a message to the web content. The message will be received as a [`message`](/reference/javascript#message) event in JavaScript.
+
+> [!TIP]
+> Using JSON strings are convenient for structured data and handling multiple messages.
+
+#### Example
+
+Sending a simple message:
+
+```gdscript
+$WebView.post_message("Hello from Godot!")
+```
+
+Sending JSON:
+
+```gdscript
+var data = {
+  "action": "update_health",
+  "health": 42
+}
+$WebView.post_message(JSON.stringify(data))
+```
+
+#### API
+
+```gdscript
+func post_message(message: String) -> void:
+```
+
+| Parameter | Type   | Description                           |
+| --------- | ------ | ------------------------------------- |
+| message   | String | The message to be sent to JavaScript. |
 
 **Returns:** `void`
 
@@ -202,8 +239,39 @@ Opens a dialog to print the current webview content.
 
 #### API
 
-```py
+```gdscript
 func print() -> void:
+```
+
+**Returns:** `void`
+
+### reload()
+
+Reloads the current page in the webview.
+
+<a class="button" href="https://docs.rs/wry/latest/wry/struct.WebView.html#method.reload" target="_blank">WRY Documentation</a>
+
+#### API
+
+```gdscript
+func reload() -> void:
+```
+
+**Returns:** `void`
+
+### resize()
+
+Manually resizes the webview based on the current control size or viewport size.
+
+If `full_window_size` is set to `true`, it will be resized to the full viewport size. Otherwise, it will use the control's position and size.
+
+> [!NOTE]
+> Usually you don't need to call this method directly, as the webview automatically resizes when the control or viewport changes size.
+
+#### API
+
+```gdscript
+func resize() -> void:
 ```
 
 **Returns:** `void`
@@ -216,7 +284,7 @@ Shows or hides the webview.
 
 #### API
 
-```py
+```gdscript
 func set_visible(visible: bool) -> void:
 ```
 
@@ -226,13 +294,20 @@ func set_visible(visible: bool) -> void:
 
 **Returns:** `void`
 
+### update_visibility()
+
+Updates the webview's visibility based on whether the control is visible in the scene tree.
+
+> [!NOTE]
+> This is automatically called when the control's visibility changes. You generally don't need to call this method directly. If you want to change the visibility, use [`set_visible()`](#set-visible) instead.
+
 #### API
 
-```py
-func url() -> String:
+```gdscript
+func update_visibility() -> void:
 ```
 
-**Returns:** `String`
+**Returns:** `void`
 
 ### zoom(...)
 
@@ -242,7 +317,7 @@ Changes the zoom level of the page.
 
 #### Example
 
-```py
+```gdscript
 # Set zoom to 150%
 $WebView.zoom(1.5)
 
@@ -252,7 +327,7 @@ $WebView.zoom(1.0)
 
 #### API
 
-```py
+```gdscript
 func zoom(factor: float) -> void:
 ```
 
@@ -270,7 +345,7 @@ Emitted when JavaScript code in the WebView sends a message using `ipc.postMessa
 
 #### Example
 
-```py
+```gdscript
 func _ready() -> void:
 	$WebView.connect("ipc_message", self, "_on_ipc_message")
 	$WebView.load_html('
@@ -293,7 +368,7 @@ func _on_ipc_message(message: String) -> void:
 
 #### API
 
-```py
+```gdscript
 signal ipc_message(message: String)
 ```
 
