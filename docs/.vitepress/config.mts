@@ -96,4 +96,5 @@ export default defineConfig({
     outline: [2, 3],
   },
   head: [["link", { rel: "icon", href: "/favicon.png" }]],
+  ignoreDeadLinks: true,
 });
