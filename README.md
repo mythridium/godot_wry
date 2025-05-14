@@ -41,26 +41,46 @@
   
 </details>
 
-## 💾 Downloading
+## 💾 Installing
 
 ### Asset Library
 
-You can download the extension directly on the [Godot Asset Library](https://godotengine.org/asset-library/asset/3426) or by navigating to the "AssetLib" tab in the editor and searching for "wry".
+The easiest way to install Godot WRY is through Godot's [Asset Library](https://godotengine.org/asset-library/asset/3426). You can install it via the editor by following these instructions:
 
-### Releases
+1. Open your project in Godot 4.1 or later.
+2. Go to the "📥 AssetLib" tab at the top of the editor.
+3. Search for "Godot WRY".
+4. Click on the Godot WRY extension and click **Download**.
+5. In the configuration dialog, click **Install**.
 
-Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_wry/releases) page, download the latest ZIP (_not_ the source code) and import it manually into your project.
+### GitHub releases
+
+1. Go to the [Releases](https://github.com/doceazedo/godot_wry/releases) page.
+2. Download the latest release ZIP file (_not_ the source code).
+3. Extract the contents into your project's "addons" folder (create one if it doesn't exist yet).
+
+### Build from source
+
+You can use [just](https://github.com/casey/just) to build the extension and move the binaries to the Godot project folder with the command:
+
+```sh
+$ just build
+```
+
+## 📚 Documentation
+
+Please refer to the [Docs](https://godot-wry.doceazedo.com) for API reference and in-depth guides on how to use Godot WRY.
 
 ## 🎯 Supported platforms
 
-| Platform                | Support                                                                 | Web engine                 |
-| ----------------------- | ----------------------------------------------------------------------- | -------------------------- |
-| **Windows (10, 11)**    | ✅ Supported                                                            | WebView2 (Chromium)        |
-| **Mac (Apple Silicon)** | ✅ Supported                                                            | WebKit                     |
-| **Linux**               | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
-| **Android**             | ⏳ Planned                                                              | Android WebView (Chromium) |
-| **iOS**                 | ⏳ Planned                                                              | WebKit                     |
-| **Browser/HTML5**       | ⏳ Planned                                                              | —                          |
+| Platform                        | Support                                                                 | Web engine                 |
+| ------------------------------- | ----------------------------------------------------------------------- | -------------------------- |
+| **Windows (10, 11)**            | ✅ Supported                                                            | WebView2 (Chromium)        |
+| **Mac (Intel, Apple Sillicon)** | ✅ Supported                                                            | WebKit                     |
+| **Linux**                       | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
+| **Android**                     | ⏳ Planned                                                              | Android WebView (Chromium) |
+| **iOS**                         | ⏳ Planned                                                              | WebKit                     |
+| **Browser/HTML5**               | ⏳ Planned                                                              | —                          |
 
 ### Linux
 
@@ -69,73 +89,6 @@ Alternatively, you can go to the [Releases](https://github.com/doceazedo/godot_w
 ### Android/iOS
 
 WRY itself already has [mobile support](https://github.com/tauri-apps/wry/blob/dev/MOBILE.md). Contributions to add Android/iOS support in this extension are welcome!
-
-## 🚀 Getting started
-
-After installing the extension, you will now be able to see the **WebView** node inside `Node → CanvasItem → Control` when creating a new node. You can edit it's properties and layout as you wish.
-
-| ![](assets/create-new-node.png)                       | ![](assets/inspector.png)                      |
-| ----------------------------------------------------- | ---------------------------------------------- |
-| <p align="center"><i>"Create new node" window</i></p> | <p align="center"><i>WebView inspector</i></p> |
-
-## ⚡ API usage
-
-### Interop between Webview and Godot
-
-Godot and the webview can exchange messages with each other. This is useful for updating the UI data, or triggering game actions when interacting with the UI.
-
-> 💡 **Example:** you can send a `play` message on a HTML button click, then Godot can listen for that message and start the game.
-
-Sending messages from Godot to the webview:
-
-```py
-$WebView.post_message("Hello from Godot!")
-```
-
-Sending messages from JavaScript to Godot:
-
-```js
-window.ipc.postMessage("Hello from JavaScript!");
-```
-
-Receiving messages in Godot using the `ipc_message` signal:
-
-```py
-func _on_web_view_ipc_message(message):
-	print("Just got a message from the webview: %s" % message)
-```
-
-Receiving messages in JavaScript using an event listener:
-
-```js
-document.addEventListener("message", (event) => {
-  console.log("Just got a message from Godot:", event.detail);
-});
-```
-
-### Evaluate JavaScript
-
-You can also evaluate a JS script by using the `eval` API:
-
-```py
-# Log to the webview devtools
-$WebView.eval("console.log(Math.PI)");
-```
-
-By using the interoperability API, you could even process asynchronous tasks with JavaScript, then get the result in GDScript later:
-
-```py
-func _on_button_pressed():
-	$WebView.eval("
-		const resp = await fetch('https://httpbin.org/ip');
-		const data = await resp.json();
-		ipc.postMessage(JSON.stringify(data));
-	")
-
-func _on_web_view_ipc_message(message):
-	var data = JSON.parse_string(message)
-	print("Your IP address is: %s" % data.origin)
-```
 
 ## ❌ Caveats
 
