@@ -1,6 +1,6 @@
 # What is Godot WRY?
 
-WRY is a cross-platform library for rendering webviews. This extension integrates WRY into Godot, allowing you to embed web content directly within your Godot game/application.
+[WRY](https://github.com/tauri-apps/wry) is a cross-platform library for rendering webviews. This extension integrates WRY into Godot, allowing you to embed web content directly within your Godot game/application.
 
 Unlike frameworks like CEF (Chromium Embedded Framework), which require bundling a full browser engine with your project, WRY uses the built-in webview provided by the user's operating system. This reduces your game size and lowers memory and CPU usage at runtime.
 
