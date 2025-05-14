@@ -44,3 +44,7 @@
 .button:hover {
   background-color: var(--vp-button-alt-hover-bg);
 }
+
+.vp-doc p img {
+  margin: 0 auto;
+}
