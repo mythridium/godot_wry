@@ -65,6 +65,10 @@ It's very important and super useful to refer to other pages of the documentatio
 - If another page mentions the content related to your page, **add a link**.
 - If another page would benefit from the information that you added, instead of repeating yourself, **add a link**.
 
+## API reference
+
+The API reference pages are maintained manually. They should maintain the exact same format as they currently have, and should always stay up to date to the latest changes.
+
 ## Building and testing docs
 
 To preview documentation locally, you will need to install [Node.js](https://nodejs.org/en). Then, inside the **"/docs"** directory, install the dependencies:
