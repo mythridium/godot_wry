@@ -6,14 +6,14 @@ Unlike frameworks like CEF (Chromium Embedded Framework), which require bundling
 
 ## Supported platforms
 
-| Platform                | Support                                                                 | Web engine                 |
-| ----------------------- | ----------------------------------------------------------------------- | -------------------------- |
-| **Windows (10, 11)**    | ✅ Supported                                                            | WebView2 (Chromium)        |
-| **Mac (Apple Silicon)** | ✅ Supported                                                            | WebKit                     |
-| **Linux**               | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
-| **Android**             | ⏳ Planned                                                              | Android WebView (Chromium) |
-| **iOS**                 | ⏳ Planned                                                              | WebKit                     |
-| **Browser/HTML5**       | ⏳ Planned                                                              | —                          |
+| Platform                        | Support                                                                 | Web engine                 |
+| ------------------------------- | ----------------------------------------------------------------------- | -------------------------- |
+| **Windows (10, 11)**            | ✅ Supported                                                            | WebView2 (Chromium)        |
+| **Mac (Intel, Apple Sillicon)** | ✅ Supported                                                            | WebKit                     |
+| **Linux**                       | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
+| **Android**                     | ⏳ Planned                                                              | Android WebView (Chromium) |
+| **iOS**                         | ⏳ Planned                                                              | WebKit                     |
+| **Browser/HTML5**               | ⏳ Planned                                                              | —                          |
 
 ### Linux
 
