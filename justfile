@@ -49,12 +49,12 @@ build-macos-universal:
 	@echo "Building universal macOS binary..."
 	cargo build --target aarch64-apple-darwin --release
 	cargo build --target x86_64-apple-darwin --release
-	mkdir -p ./target/release/libgodot_wry.macos.framework/Resources
-	lipo -create -output ./target/release/libgodot_wry.macos.dylib ./target/aarch64-apple-darwin/release/libgodot_wry.dylib ./target/x86_64-apple-darwin/release/libgodot_wry.dylib
-	mv ./target/release/libgodot_wry.macos.dylib ./target/release/libgodot_wry.macos.framework/libgodot_wry.macos.dylib
-	cp ../assets/Info.plist ./target/release/libgodot_wry.macos.framework/Resources/Info.plist
+	mkdir -p ./target/release/libgodot_wry.framework/Resources
+	lipo -create -output ./target/release/libgodot_wry.dylib ./target/aarch64-apple-darwin/release/libgodot_wry.dylib ./target/x86_64-apple-darwin/release/libgodot_wry.dylib
+	mv ./target/release/libgodot_wry.dylib ./target/release/libgodot_wry.framework/libgodot_wry.dylib
+	cp ../assets/Info.plist ./target/release/libgodot_wry.framework/Resources/Info.plist
 	mkdir -p ../godot/addons/godot_wry/bin/universal-apple-darwin
-	cp -R ./target/release/libgodot_wry.macos.framework ../godot/addons/godot_wry/bin/universal-apple-darwin
+	cp -R ./target/release/libgodot_wry.framework ../godot/addons/godot_wry/bin/universal-apple-darwin
 
 build-linux:
 	@echo "Building for Linux..."
