@@ -26,7 +26,13 @@ The easiest way to install Godot WRY is through Godot's [Asset Library](https://
 
 ### Build from source
 
-[...]
+Use [just](https://github.com/casey/just) to build the extension and move the binaries to the Godot project folder:
+
+```bash
+just build
+```
+
+Please refer to the [Building from source](/contributing/compiling) page for more details on how to compile the project binaries.
 
 ## Rendering webview
 
