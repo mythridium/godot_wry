@@ -15,38 +15,35 @@ jobs:
     strategy:
       matrix:
         platform:
-          - os-name: 🐧 Linux 64-bit
+          - os-name: 🐧 Linux (64-bit)
             runs-on: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-          - os-name: 🍎 macOS ARM64
+          - os-name: 🍎 macOS (Universal)
             runs-on: macos-latest
-            target: aarch64-apple-darwin
-          - os-name: 🪟 Windows 64-bit
+            target: universal-apple-darwin
+          - os-name: 🪟 Windows (64-bit)
             runs-on: windows-latest
             target: x86_64-pc-windows-msvc
     runs-on: ${{ matrix.platform.runs-on }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install dependencies
-        if: ${{ matrix.platform.target == 'x86_64-unknown-linux-gnu' }}
-        run: sudo apt-get update && sudo apt-get install libgtk-3-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libjavascriptcoregtk-4.1-dev
-      - name: Build binaries
-        uses: houseabsolute/actions-rust-cross@v1
+
+      - name: Install Linux dependencies
+        if: ${{ matrix.platform.runs-on == 'ubuntu-latest' }}
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libsoup-3.0-dev libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libayatana-appindicator3-dev librsvg2-dev libjavascriptcoregtk-4.1-dev
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          working-directory: "rust"
-          command: "build"
-          target: ${{ matrix.platform.target }}
-          args: "--locked --release"
-          strip: true
-      - name: Build macOS-specific library
-        if: ${{ matrix.platform.target == 'aarch64-apple-darwin' }}
-        run: |
-          mkdir rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework
-          mv rust/target/${{ matrix.platform.target }}/release/libgodot_wry.dylib \
-              rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework/libgodot_wry.dylib
-          mkdir rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework/Resources
-          cp assets/Info.plist rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework/Resources/Info.plist
+          targets: ${{ matrix.platform.target == 'universal-apple-darwin' && 'aarch64-apple-darwin,x86_64-apple-darwin' || matrix.platform.target }}
+
+      - name: Install Just
+        uses: extractions/setup-just@v1
+
+      - name: Build binaries
+        run: just ${{ matrix.platform.target == 'universal-apple-darwin' && 'build-macos-universal' || 'build' }}
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -64,14 +61,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Download binaries
         uses: actions/download-artifact@v4
         with:
           path: godot/addons/godot_wry/bin
+
       - name: Clean files
         run: |
           mkdir -p package/godot_wry
           mv godot/addons package/godot_wry
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
