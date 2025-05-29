@@ -75,18 +75,20 @@ Please refer to the [Docs](https://godot-wry.doceazedo.com) for API reference an
 
 ## 🎯 Supported platforms
 
-| Platform                        | Support                                                                 | Web engine                 |
-| ------------------------------- | ----------------------------------------------------------------------- | -------------------------- |
-| **Windows (10, 11)**            | ✅ Supported                                                            | WebView2 (Chromium)        |
-| **Mac (Intel, Apple Sillicon)** | ✅ Supported                                                            | WebKit                     |
-| **Linux**                       | 🚧 [Work in progress](https://github.com/doceazedo/godot_wry/issues/17) | WebKitGTK                  |
-| **Android**                     | ⏳ Planned                                                              | Android WebView (Chromium) |
-| **iOS**                         | ⏳ Planned                                                              | WebKit                     |
-| **Browser/HTML5**               | ⏳ Planned                                                              | —                          |
+| Platform                        | Support        | Web engine                 |
+| ------------------------------- | -------------- | -------------------------- |
+| **Windows (10, 11)**            | ✅ Supported   | WebView2 (Chromium)        |
+| **Mac (Intel, Apple Sillicon)** | ✅ Supported   | WebKit                     |
+| **Linux (X11)**                 | 🚧 Supported\* | WebKitGTK                  |
+| **Android**                     | ⏳ Planned     | Android WebView (Chromium) |
+| **iOS**                         | ⏳ Planned     | WebKit                     |
+| **Browser/HTML5**               | ⏳ Planned     | —                          |
 
 ### Linux
 
 [WebKitGTK](https://webkitgtk.org) is required for WRY to function on Linux. The package name may differ based on the operating system and Linux distribution.
+
+\* X11 support only. Transparency is currently not supported. See [#17](https://github.com/doceazedo/godot_wry/issues/17).
 
 ### Android/iOS
 
