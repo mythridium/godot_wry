@@ -48,7 +48,7 @@ jobs:
         if: ${{ matrix.platform.runs-on == 'macos-latest' }}
         run: |
           brew install --cask powershell
-          scripts/ci-sign-macos.ps1 rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework
+          pwsh scripts/ci-sign-macos.ps1 rust/target/${{ matrix.platform.target }}/release/libgodot_wry.framework
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
