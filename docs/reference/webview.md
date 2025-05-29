@@ -10,6 +10,7 @@ The fundamental `Control` node to present a webview.
 | url                  | String     | Initial URL to be loaded. This will override `html`.                                                      |
 | html                 | String     | HTML string to be loaded. This will be ignored if `url` is provided.                                      |
 | transparent          | bool       | Webview should be transparent.                                                                            |
+| autoplay             | bool       | Media can be played without user interaction.                                                             |
 | background_color     | Color      | **🚧 Not implemented.** Webview background color. This will be ignored if `transparent` is set to `true`. |
 | devtools             | bool       | Enables web inspector. To open it, you can call `open_devtools()`, or right click the page and open it.   |
 | headers              | Dictionary | **🚧 Not implemented.** Headers used when loading the requested URL.                                      |
