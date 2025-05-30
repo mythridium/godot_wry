@@ -96,9 +96,11 @@ WRY itself already has [mobile support](https://github.com/tauri-apps/wry/blob/d
 
 ## ❌ Caveats
 
-- The webview is rendered directly within the window. This prevents rendering on 3D meshes and is always rendered on top of the game.
-- Using the system's native webview can lead to platform inconsistencies, like how a site behaves differently in Chrome vs. Safari.
-- This extension doesn't check dependencies, so it's up to you to ensure they're installed and handle the missing libraries.
+- Webview always renders on top
+- Different browser engines across platforms
+- No automatic dependency checks
+
+You can learn more about these caveats on the [Caveats](https://godot-wry.doceazedo.com/about/caveats) documentation page.
 
 ## 🤝 Contribute
 
@@ -116,4 +118,4 @@ Below is a list of interesting similar projects:
 
 - [gdcef](https://github.com/Lecrapouille/gdcef/tree/godot-4.x) — Open-source, powered by Chromium
 - [Godot-HTML](https://github.com/Decapitated/Godot-HTML) — Open-source, powered by Ultralight (WebKit)
-- [godot-webview](https://godotwebview.com/) — Commercial, powered by QT (Chromium)
+- [godot-webview](https://godotwebview.com/) — Commercial, powered by QT (Chromium/CEF)
