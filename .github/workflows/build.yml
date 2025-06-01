@@ -64,7 +64,7 @@ jobs:
         with:
           name: ${{ matrix.platform.target }}
           path: |
-            godot/addons/godot_wry/bin
+            godot/addons/godot_wry/bin/${{ matrix.platform.target }}
 
   zip:
     name: 📦 Package
