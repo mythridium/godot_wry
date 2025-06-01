@@ -14,9 +14,6 @@
 
 [WRY](https://github.com/tauri-apps/wry) is a cross-platform webview rendering library. This extension allows you to use the native webview in Godot to build browsers and GUIs with HTML, CSS and JavaScript.
 
-> [!WARNING]  
-> This extension is a work in progress! Expect bugs, report issues, and feel free to contribute.
-
 ## ✨ Features
 
 - 🍃 Use the native system native webview (no extra dependencies!)
