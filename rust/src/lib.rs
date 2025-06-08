@@ -6,23 +6,23 @@ use godot::init::*;
 use godot::prelude::*;
 use godot::classes::{Control, DisplayServer, IControl, InputEventMouseButton, InputEventMouseMotion, InputEventKey};
 use godot::global::{Key, MouseButton};
-use raw_window_handle::{HasWindowHandle, RawWindowHandle};
-
+use lazy_static::lazy_static;
+use serde_json;
+use std::collections::HashMap;
+use std::sync::Mutex;
 use wry::{WebViewBuilder, Rect, WebViewAttributes};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
+
 use crate::godot_window::GodotWindow;
 use crate::protocols::get_res_response;
-use serde_json;
-use std::sync::Mutex;
-use lazy_static::lazy_static;
-use std::collections::HashMap;
 
 #[cfg(target_os = "windows")]
-use windows::Win32::Foundation::HWND;
-
-#[cfg(target_os = "windows")]
-use windows::Win32::UI::WindowsAndMessaging::{GetWindowLongPtrA, SetWindowLongPtrA, GWL_STYLE};
+use {
+    raw_window_handle::{HasWindowHandle, RawWindowHandle},
+    windows::Win32::Foundation::HWND,
+    windows::Win32::UI::WindowsAndMessaging::{GetWindowLongPtrA, SetWindowLongPtrA, GWL_STYLE},
+};
 
 // Required for Windows to link against the wevtapi library for webview2,
 // not sure why webview2-com-sys doesn't do this automatically.
@@ -267,7 +267,7 @@ impl WebView {
                                 
                                 "_key_down" | "_key_up" => {
                                     let key_str = json_value.get("key").and_then(|v| v.as_str()).unwrap_or("");
-                                    let key_code = json_value.get("keyCode").and_then(|v| v.as_i64()).unwrap_or(0) as i32;
+                                    // let key_code = json_value.get("keyCode").and_then(|v| v.as_i64()).unwrap_or(0) as i32;
                                     
                                     let mut event = InputEventKey::new_gd();
                                     
