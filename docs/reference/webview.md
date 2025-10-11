@@ -378,3 +378,35 @@ signal ipc_message(message: String)
 | Parameter | Type   | Description                                     |
 | --------- | ------ | ----------------------------------------------- |
 | message   | String | The message sent from the WebView's JavaScript. |
+
+### page_load(...)
+
+Emitted when the WebView has started and finished loading a page.
+
+#### Example
+
+```gdscript
+func _ready() -> void:
+	$WebView.connect("page_load", self, "_on_page_load")
+
+func _on_page_load(event: int, url: String) -> void:
+	if event == 0
+        print("Started");
+    
+    if event == 1
+        print("Finished");
+
+    print(url); // something like http://res.addons/index.html
+```
+
+#### API
+
+```gdscript
+signal page_load(event: int, url: String)
+```
+
+| Parameter | Type   | Description                                                            |
+| --------- | ------ | ---------------------------------------------------------------------- |
+| event     | int    | 0 if the page has started loading, 1 if the page has finished loading. |
+| url       | String | The url of the page being loaded.                                      |
+

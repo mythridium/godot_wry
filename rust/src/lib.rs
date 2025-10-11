@@ -11,7 +11,7 @@ use serde_json;
 use std::collections::HashMap;
 use std::sync::Mutex;
 use std::path::PathBuf;
-use wry::{WebViewBuilder, WebContext, Rect, WebViewAttributes};
+use wry::{WebViewBuilder, WebContext, Rect, WebViewAttributes, PageLoadEvent};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
 
@@ -118,6 +118,9 @@ impl WebView {
     #[signal]
     fn ipc_message(message: GString);
 
+    #[signal]
+    fn page_load(event: Variant, message: GString);
+
     #[func]
     fn update_webview(&mut self) {
         if let Some(_) = &self.webview {
@@ -166,7 +169,8 @@ impl WebView {
             };
         }
 
-        let base = self.base().clone();
+        let base_ipc = self.base().clone();
+        let base_page_load = self.base().clone();
         let resolved_user_dir: Option<PathBuf> = if !self.user_data_directory.is_empty() {
             let dir = self.user_data_directory.to_string();
 
@@ -319,7 +323,15 @@ impl WebView {
                 }
                 
                 // if we get here, this is a regular IPC message
-                base.clone().emit_signal("ipc_message", &[body.to_variant()]);
+                base_ipc.clone().emit_signal("ipc_message", &[body.to_variant()]);
+            })
+            .with_on_page_load_handler(move | event: PageLoadEvent, url: String | {
+                let event_value: i32 = match event {
+                    PageLoadEvent::Started => 0,
+                    PageLoadEvent::Finished => 1,
+                };
+
+                base_page_load.clone().emit_signal("page_load", &[event_value.to_variant(), url.to_variant()]);
             })
             .with_custom_protocol(
                 "res".into(), move |_webview_id, request| get_res_response(request),
