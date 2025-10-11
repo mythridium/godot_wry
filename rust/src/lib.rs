@@ -10,7 +10,7 @@ use lazy_static::lazy_static;
 use serde_json;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use wry::{WebViewBuilder, Rect, WebViewAttributes};
+use wry::{WebViewBuilder, Rect, WebViewAttributes, PageLoadEvent};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
 
@@ -111,6 +111,9 @@ impl WebView {
     #[signal]
     fn ipc_message(message: GString);
 
+    #[signal]
+    fn page_load(event: Variant, message: GString);
+
     #[func]
     fn update_webview(&mut self) {
         if let Some(_) = &self.webview {
@@ -159,7 +162,8 @@ impl WebView {
             };
         }
 
-        let base = self.base().clone();
+        let base_ipc = self.base().clone();
+        let base_page_load = self.base().clone();
         let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
             url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
             html: if self.url.is_empty() { Some(String::from(&self.html)) } else { None },
@@ -283,7 +287,15 @@ impl WebView {
                 }
                 
                 // if we get here, this is a regular IPC message
-                base.clone().emit_signal("ipc_message", &[body.to_variant()]);
+                base_ipc.clone().emit_signal("ipc_message", &[body.to_variant()]);
+            })
+            .with_on_page_load_handler(move | event: PageLoadEvent, url: String | {
+                let event_value: i32 = match event {
+                    PageLoadEvent::Started => 0,
+                    PageLoadEvent::Finished => 1,
+                };
+
+                base_page_load.clone().emit_signal("page_load", &[event_value.to_variant(), url.to_variant()]);
             })
             .with_custom_protocol(
                 "res".into(), move |_webview_id, request| get_res_response(request),
