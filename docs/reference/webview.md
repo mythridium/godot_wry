@@ -378,34 +378,50 @@ signal ipc_message(message: String)
 | --------- | ------ | ----------------------------------------------- |
 | message   | String | The message sent from the WebView's JavaScript. |
 
-### page_load(...)
+### page_load_started(...)
 
-Emitted when the WebView has started and finished loading a page.
+Emitted when the WebView has started loading a page.
 
 #### Example
 
 ```gdscript
 func _ready() -> void:
-	$WebView.connect("page_load", self, "_on_page_load")
+	$WebView.connect("page_load_started", self, "_on_page_load_started")
 
-func _on_page_load(event: int, url: String) -> void:
-	if event == 0
-        print("Started");
-    
-    if event == 1
-        print("Finished");
-
+func _on_page_load_started(url: String) -> void:
     print(url); // something like http://res.addons/index.html
 ```
 
 #### API
 
 ```gdscript
-signal page_load(event: int, url: String)
+signal page_load_started(url: String)
 ```
 
 | Parameter | Type   | Description                                                            |
 | --------- | ------ | ---------------------------------------------------------------------- |
-| event     | int    | 0 if the page has started loading, 1 if the page has finished loading. |
 | url       | String | The url of the page being loaded.                                      |
 
+### page_load_finished(...)
+
+Emitted when the WebView has finished loading a page.
+
+#### Example
+
+```gdscript
+func _ready() -> void:
+	$WebView.connect("page_load_finished", self, "_on_page_load_finished")
+
+func _on_page_load_finished(url: String) -> void:
+    print(url); // something like http://res.addons/index.html
+```
+
+#### API
+
+```gdscript
+signal page_load_finished(url: String)
+```
+
+| Parameter | Type   | Description                                                            |
+| --------- | ------ | ---------------------------------------------------------------------- |
+| url       | String | The url of the page that was loaded.                                   |
