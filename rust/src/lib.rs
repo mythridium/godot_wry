@@ -4,13 +4,14 @@ mod protocols;
 use godot::global::MouseButtonMask;
 use godot::init::*;
 use godot::prelude::*;
-use godot::classes::{Control, DisplayServer, IControl, Input, InputEventMouseButton, InputEventMouseMotion, InputEventKey};
+use godot::classes::{Control, DisplayServer, IControl, Input, InputEventMouseButton, InputEventMouseMotion, InputEventKey, ProjectSettings};
 use godot::global::{Key, MouseButton};
 use lazy_static::lazy_static;
 use serde_json;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use wry::{WebViewBuilder, Rect, WebViewAttributes, PageLoadEvent};
+use std::path::PathBuf;
+use wry::{WebViewBuilder, WebContext, Rect, WebViewAttributes};
 use wry::dpi::{PhysicalPosition, PhysicalSize};
 use wry::http::Request;
 
@@ -49,6 +50,8 @@ struct WebView {
     #[export]
     html: GString,
     #[export]
+    data_directory: GString,
+    #[export]
     transparent: bool,
     #[export]
     background_color: Color,
@@ -83,6 +86,7 @@ impl IControl for WebView {
             full_window_size: true,
             url: "https://github.com/doceazedo/godot_wry".into(),
             html: "".into(),
+            data_directory: "user://".into(),
             transparent: false,
             background_color: Color::from_rgb(1.0, 1.0, 1.0),
             devtools: true,
@@ -162,9 +166,32 @@ impl WebView {
             };
         }
 
-        let base_ipc = self.base().clone();
-        let base_page_load = self.base().clone();
+        let base = self.base().clone();
+        let resolved_data_directory: Option<PathBuf> = if !self.data_directory.is_empty() {
+            let data_directory = self.data_directory.to_string();
+
+            if data_directory.starts_with("user://") {
+                let path_without_prefix = data_directory.trim_start_matches("user://");
+
+                let project_settings = ProjectSettings::singleton();
+                let base_path = project_settings.globalize_path("user://").to_string();
+                let mut absolute_path = PathBuf::from(base_path);
+                absolute_path.push(path_without_prefix);
+
+                std::fs::create_dir_all(&absolute_path).ok();
+
+                Some(absolute_path)
+            } else {
+                let path = PathBuf::from(&data_directory);
+                std::fs::create_dir_all(&path).ok();
+                Some(path)
+            }
+        } else {
+            None
+        };
+        let mut context = WebContext::new(resolved_data_directory);
         let webview_builder = WebViewBuilder::with_attributes(WebViewAttributes {
+            context: Some(&mut context),
             url: if self.html.is_empty() { Some(String::from(&self.url)) } else { None },
             html: if self.url.is_empty() { Some(String::from(&self.html)) } else { None },
             transparent: self.transparent,
@@ -276,6 +303,11 @@ impl WebView {
                                 
                                 event.set_keycode(godot_key);
                                 event.set_pressed(event_type == "_key_down");
+
+                                event.set_shift_pressed(json_value.get("shift").and_then(|v| v.as_bool()).unwrap_or(false));
+                                event.set_ctrl_pressed(json_value.get("ctrl").and_then(|v| v.as_bool()).unwrap_or(false));
+                                event.set_alt_pressed(json_value.get("alt").and_then(|v| v.as_bool()).unwrap_or(false));
+                                event.set_meta_pressed(json_value.get("meta").and_then(|v| v.as_bool()).unwrap_or(false));
                                 
                                 Input::singleton().parse_input_event(&event);
                                 return;
@@ -365,20 +397,30 @@ impl WebView {
                 });
                 document.addEventListener('keydown', (e) => {
                     if (!document.hasFocus()) return;
+                    const isModifier = ["Alt", "Shift", "Control", "Meta"].includes(e.key);
                     window.ipc.postMessage(JSON.stringify({
                         type: '_key_down',
                         key: e.key,
                         code: e.code,
-                        keyCode: e.keyCode
+                        keyCode: e.keyCode,
+                        shift: isModifier ? false : e.shiftKey,
+                        ctrl: isModifier ? false : e.ctrlKey,
+                        alt: isModifier ? false : e.altKey,
+                        meta: isModifier ? false : e.metaKey
                     }));
                 });
                 document.addEventListener('keyup', (e) => {
                     if (!document.hasFocus()) return;
+                    const isModifier = ["Alt", "Shift", "Control", "Meta"].includes(e.key);
                     window.ipc.postMessage(JSON.stringify({
                         type: '_key_up',
                         key: e.key,
                         code: e.code,
-                        keyCode: e.keyCode
+                        keyCode: e.keyCode,
+                        shift: isModifier ? false : e.shiftKey,
+                        ctrl: isModifier ? false : e.ctrlKey,
+                        alt: isModifier ? false : e.altKey,
+                        meta: isModifier ? false : e.metaKey
                     }));
                 });
             "#;
@@ -512,6 +554,13 @@ impl WebView {
     fn reload(&self) {
         if let Some(webview) = &self.webview {
             let _ = webview.reload();
+        }
+    }
+
+    #[func]
+    fn zoom(&self, scale_factor: f64) {
+        if let Some(webview) = &self.webview {
+            let _ = webview.zoom(scale_factor);
         }
     }
 }
